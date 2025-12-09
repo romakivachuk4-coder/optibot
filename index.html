@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,41 +8,63 @@
 </head>
 <body>
 
-<div class="card">
-    <h1 class="title">AI OptiBotX</h1>
+<div class="card app-container" role="main" aria-labelledby="title">
+    <header class="app-header">
+        <h1 id="title" class="title">AI OptiBotX</h1>
+        <div class="controls-top">
+            <button id="lang-toggle" class="icon-btn" title="Change language">RU</button>
+        </div>
+    </header>
 
-    <label>Select currency pair:</label>
-    <select id="pair">
-        <option>EUR/USD</option>
-    </select>
+    <label id="pair-label">Select currency pair:</label>
+    <select id="pair" aria-label="Currency pair"></select>
 
-    <label>Upload photo for analysis:</label>
+    <label id="photo-label">Upload photo for analysis:</label>
     <div class="photo-row">
-        <button id="camera-btn" class="take-photo-btn">📷 Take Photo</button>
-        <div class="preview"></div>
+        <input type="file" id="photo" accept="image/*" capture="environment" style="display:none;">
+        <button id="camera-btn" class="take-photo-btn" aria-label="Take photo">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 17a5 5 0 100-10 5 5 0 000 10z" fill="white"/></svg>
+            <span id="camera-text">Take Photo</span>
+        </button>
+        <div id="preview" class="preview hidden" aria-hidden="true">
+            <img id="preview-img" alt="Preview" />
+            <button id="remove-photo" class="remove-btn" aria-label="Remove photo">&times;</button>
+        </div>
     </div>
 
     <label>Time</label>
-    <div class="time-grid">
-        <button class="time-btn">5s</button>
-        <button class="time-btn">10s</button>
-        <button class="time-btn active">1m</button>
-        <button class="time-btn">2m</button>
-        <button class="time-btn">4m</button>
-        <button class="time-btn">5m</button>
-        <button class="time-btn">10m</button>
-        <button class="time-btn">20m</button>
-        <button class="time-btn">1h</button>
+    <div class="time-grid timeframe-row">
+        <button class="time-btn" data-time="5s">5s</button>
+        <button class="time-btn" data-time="10s">10s</button>
+        <button class="time-btn" data-time="15s">15s</button>
+        <button class="time-btn" data-time="30s">30s</button>
+        <button class="time-btn" data-time="1m">1m</button>
+        <button class="time-btn" data-time="2m">2m</button>
+        <button class="time-btn" data-time="4m">4m</button>
+        <button class="time-btn" data-time="5m">5m</button>
+        <button class="time-btn" data-time="10m">10m</button>
+        <button class="time-btn" data-time="20m">20m</button>
+        <button class="time-btn" data-time="1h">1h</button>
     </div>
 
-    <button id="analyze" class="primary-btn">Analyze</button>
+    <button id="analyze" class="primary big-btn">Analyze</button>
 
-    <div class="calc-box">
+    <div id="loading" class="hidden">
+        <div class="spinner" role="status" aria-hidden="true"></div>
+        <p id="loading-text">Analyzing...</p>
+    </div>
+
+    <div id="result" aria-live="polite"></div>
+
+    <div class="calculator calc-box">
+        <label class="field-label">Calculator:</label>
+
         <div class="calc-row">
-            <input type="number" id="calc" class="calc-input" placeholder="Enter number...">
-            <div class="calc-result">= 0.00000</div>
+            <input type="number" id="calc-input" class="calc-input" placeholder="Enter number..." />
+            <div id="calc-result" class="calc-result">= 0.00000</div>
         </div>
-        <button class="primary-btn big-btn">Divide</button>
+
+        <button id="calc-divide" class="primary big-btn">Divide</button>
     </div>
 </div>
 
