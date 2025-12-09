@@ -30,14 +30,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function applyLang() {
         const t = i18n[lang];
-        if (els.title) els.title.textContent = t.title;
-        if (els.pairLabel) els.pairLabel.textContent = t.selectPair;
-        if (els.photoLabel) els.photoLabel.textContent = t.uploadPhoto;
-        if (els.cameraText) els.cameraText.textContent = t.takePhoto;
-        if (els.analyzeBtn) els.analyzeBtn.textContent = t.analyze;
-        if (els.loadingText) els.loadingText.textContent = t.analyzing;
-        if (els.langToggle) els.langToggle.textContent = lang.toUpperCase();
-        if (els.result && !els.result.dataset.custom) els.result.textContent = t.result;
+        els.title.textContent = t.title;
+        els.pairLabel.textContent = t.selectPair;
+        els.photoLabel.textContent = t.uploadPhoto;
+        els.cameraText.textContent = t.takePhoto;
+        els.analyzeBtn.textContent = t.analyze;
+        els.loadingText.textContent = t.analyzing;
+        if (!els.result.dataset.custom) els.result.textContent = t.result;
+        els.langToggle.textContent = lang.toUpperCase();
         localStorage.setItem('lang', lang);
         populatePairs();
     }
@@ -67,59 +67,52 @@ document.addEventListener('DOMContentLoaded', function () {
         normalPairs.forEach(p => html += `<option value="${p}">${p}</option>`);
         otcPairs.forEach(p => html += `<option value="${p}">${p}</option>`);
 
-        if (els.pairSelect) els.pairSelect.innerHTML = html;
+        els.pairSelect.innerHTML = html;
     }
 
     function showPreview(file) {
-        if (!file) return;
         const url = URL.createObjectURL(file);
-        if (els.previewImg) els.previewImg.src = url;
-        if (els.preview) {
-            els.preview.classList.remove('hidden');
-            els.preview.setAttribute('aria-hidden','false');
-        }
-        if (els.previewImg) els.previewImg.onload = () => URL.revokeObjectURL(url);
+        els.previewImg.src = url;
+        els.preview.classList.remove('hidden');
+        els.preview.setAttribute('aria-hidden','false');
+        els.previewImg.onload = () => URL.revokeObjectURL(url);
     }
 
-    if (els.cameraBtn) els.cameraBtn.addEventListener('click', () => { if (els.photoInput) els.photoInput.click(); });
-    if (els.photoInput) els.photoInput.addEventListener('change', e => {
+    els.cameraBtn.addEventListener('click', () => els.photoInput.click());
+    els.photoInput.addEventListener('change', e => {
         const file = e.target.files?.[0];
         if (file) showPreview(file);
     });
 
-    if (els.removePhoto) els.removePhoto.addEventListener('click', e => {
+    els.removePhoto.addEventListener('click', e => {
         e.stopPropagation();
-        if (els.photoInput) els.photoInput.value = '';
-        if (els.previewImg) els.previewImg.src = '';
-        if (els.preview) {
-            els.preview.classList.add('hidden');
-            els.preview.setAttribute('aria-hidden','true');
-        }
+        els.photoInput.value = '';
+        els.previewImg.src = '';
+        els.preview.classList.add('hidden');
+        els.preview.setAttribute('aria-hidden','true');
     });
 
-    if (els.analyzeBtn) els.analyzeBtn.addEventListener('click', async () => {
-        if (els.loading) els.loading.classList.remove('hidden');
-        if (els.result) els.result.textContent = '';
-        if (els.result) els.result.dataset.custom = '';
-        if (els.analyzeBtn) els.analyzeBtn.disabled = true;
+    els.analyzeBtn.addEventListener('click', async () => {
+        els.loading.classList.remove('hidden');
+        els.result.textContent = '';
+        els.result.dataset.custom = '';
+        els.analyzeBtn.disabled = true;
 
         await new Promise(r=>setTimeout(r,1100));
 
-        const pair = (els.pairSelect && els.pairSelect.value) ? els.pairSelect.value : 'EUR/USD';
+        const pair = els.pairSelect.value;
         const score = (Math.random()*2-1).toFixed(2);
         const num = parseFloat(score);
         const isBuy = num > 0;
-        if (els.result) {
-            els.result.style.color = isBuy ? '#4ade80' : '#f87171';
-            els.result.textContent = `${pair}: ${isBuy ? 'BUY ↑' : 'SELL ↓'} (${score})`;
-            els.result.dataset.custom = '1';
-        }
+        els.result.style.color = isBuy ? '#4ade80' : '#f87171';
+        els.result.textContent = `${pair}: ${isBuy ? 'BUY ↑' : 'SELL ↓'} (${score})`;
+        els.result.dataset.custom = '1';
 
-        if (els.loading) els.loading.classList.add('hidden');
-        if (els.analyzeBtn) els.analyzeBtn.disabled = false;
+        els.loading.classList.add('hidden');
+        els.analyzeBtn.disabled = false;
     });
 
-    if (els.langToggle) els.langToggle.addEventListener('click', () => {
+    els.langToggle.addEventListener('click', () => {
         lang = lang === 'en' ? 'ru' : 'en';
         applyLang();
     });
@@ -143,20 +136,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     updateActiveTime();
 
-    if (els.calcBtn) els.calcBtn.addEventListener('click', () => {
+    els.calcBtn.addEventListener('click', () => {
         const value = parseFloat(els.calcInput.value);
         if (isNaN(value)) {
-            if (els.calcResult) {
-                els.calcResult.textContent = 'Введите число';
-                els.calcResult.style.color = '#f87171';
-            }
+            els.calcResult.textContent = 'Введите число';
+            els.calcResult.style.color = '#f87171';
             return;
         }
         const res = value / 11;
-        if (els.calcResult) {
-            els.calcResult.textContent = "= " + res.toFixed(4);
-            els.calcResult.style.color = '#4ade80';
-        }
+        els.calcResult.textContent = "= " + res.toFixed(4);
+        els.calcResult.style.color = '#4ade80';
     });
 
     populatePairs();
